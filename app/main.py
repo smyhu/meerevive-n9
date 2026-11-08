@@ -15,7 +15,7 @@ from PySide.QtCore import QObject, QUrl, QProcess, QSettings, Signal, Slot
 from PySide.QtGui import QApplication
 from PySide.QtDeclarative import QDeclarativeView
 
-APP_VERSION = '0.3.4'
+APP_VERSION = '0.3.5'
 BASE = '/opt/meerevive-n9'
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 HELPER = os.path.join(BASE, 'bin', 'meerevive-root')

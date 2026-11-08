@@ -10,7 +10,7 @@ ENG=$(cd "$(dirname "$0")/../engine" && pwd)
 OUT=${1:?output dir}
 VARIANT=${2:-private}
 case "$VARIANT" in public|private) ;; *) echo "variant: public or private"; exit 1 ;; esac
-PRIVATE_ONLY="cloudgps-fix"
+PRIVATE_ONLY="cloudgps-fix meerun"
 rm -rf "$OUT"; mkdir -p "$OUT/payload/debs" "$OUT/payload/tls/own" "$OUT/payload/tls/original" "$OUT/payload/tools" "$OUT/payload/fonts" "$OUT/payload/meecast/qml" "$OUT/lib"
 cp $ENG/engine.sh "$OUT/"; cp $ENG/lib/user-browser.sh "$OUT/lib/"
 
@@ -30,6 +30,7 @@ netmee-n9|deb|$R/przegladarka/netmee/dist/netmee-n9_0.1.3_armel.deb|tls|NetMee -
 authmee-n9|deb|$R/authenticator/authmee/dist/authmee-n9_0.1.0_armel.deb||AuthMee - 2FA codes|
 cloudgps-fix|deb|$R/nawigacja/cloudgps-fix/cloudgps-fix_1.1.0_armel.deb|tls|CloudGPS with search and routes (car, foot, bike)|cloudgps
 modrana|deb|$R/nawigacja/modrana/modrana_0.43.4-n9.4_armel.deb|tls|modRana - maps and search||replace
+meerun|deb|$P/meerun/dist/meerun_1.4.2-n9.3_armel.deb|tls|MeeRun - sports tracker with new maps (OSM, CyclOSM, OpenTopoMap, Esri)||replace
 meecast|deb|$P/meerevive/extras/meecast_1.1.33_armel.deb||MeeCast 1.1.33 weather (vasvlad)|
 meecast-applet|deb|$P/meerevive/extras/meecast-applet-enable_0.2_all.deb|meecast|MeeCast weather in Events view (instead of AccuWeather)|
 meecast-openmeteo|meecast|||MeeCast weather source Open-Meteo|

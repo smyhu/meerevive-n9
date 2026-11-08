@@ -36,11 +36,11 @@ Licences of every component are in [tools/LICENSES.txt](tools/LICENSES.txt).
 ## Install
 
 You need a phone with developer mode and `aegis-dpkg` (from QTweak / hack-installer).
-Copy `dist/meerevive-n9_0.3.4-public_armel.deb` to the phone (for example to
+Copy `dist/meerevive-n9_0.3.5-public_armel.deb` to the phone (for example to
 `/home/developer`, because `/tmp` is only 4 MB) and install it as root:
 
 ```
-aegis-dpkg -i /home/developer/meerevive-n9_0.3.4-public_armel.deb
+aegis-dpkg -i /home/developer/meerevive-n9_0.3.5-public_armel.deb
 ```
 
 Then start **MeeRevive** from its icon. The package is about 37 MB because it carries every

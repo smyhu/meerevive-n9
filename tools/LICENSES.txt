@@ -32,3 +32,4 @@ kanaly               MIT                           payload/tools/kanaly.sh
 
 Private build only (not in the public package):
 cloudgps-fix         GPL binary of CloudGPS 0.6.4 without published source
+meerun (n9.3)        MeeRun 1.4.2 (OpenRepos, all rights reserved), binary-patched tile URLs

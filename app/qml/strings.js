@@ -68,6 +68,7 @@ var texts = {
     "c_authmee-n9":        { "pl": "AuthMee - kody 2FA" },
     "c_cloudgps-fix":      { "pl": "CloudGPS z wyszukiwaniem i trasami (samochód, pieszo, rower)" },
     "c_modrana":           { "pl": "modRana - mapy i wyszukiwanie" },
+    "c_meerun":            { "pl": "MeeRun - trening sportowy z nowymi mapami (OSM, CyclOSM, OpenTopoMap, Esri)" },
     "c_meecast":           { "pl": "Pogoda MeeCast 1.1.33 (vasvlad)" },
     "c_meecast-applet":    { "pl": "Pogoda MeeCast w widoku Zdarzeń (zamiast AccuWeather)" },
     "c_meecast-openmeteo": { "pl": "Źródło pogody Open-Meteo dla MeeCast" },
