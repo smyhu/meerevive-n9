@@ -1,0 +1,7 @@
+<aegis>
+  <request policy="set">
+    <credential name="CAP::setuid" />
+    <credential name="CAP::setgid" />
+    <for path="/opt/meerevive-n9/bin/meerevive-root" />
+  </request>
+</aegis>

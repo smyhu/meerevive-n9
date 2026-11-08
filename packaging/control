@@ -1,0 +1,18 @@
+Package: meerevive-n9
+Version: @VERSION@
+Architecture: armel
+Section: user/system
+Priority: optional
+Maintainer: smyhu <smyhu@users.noreply.github.com>
+Depends: python (>= 2.6), python-pyside.qtdeclarative, python-pyside.qtgui, python-dbus, qt-components
+Installed-Size: @SIZE@
+Description: MeeRevive - brings the Nokia N9 back to life (@VARIANT@ build)
+ One app that installs and removes the community fixes for Harmattan
+ PR1.3: TLS 1.2 patch, emoji font, WebP, system browser for links,
+ MeeCast weather with Open-Meteo, and apps written for the N9
+ (Waluty, Lyrion, MeeTranslate, HAL 2027, GPS Info, NetMee, AuthMee,
+ modRana, Tiny Tiny RSS). Backup and restore for moving to another phone.
+ Designed and written by Claude (Anthropic) together with smyhu.
+XB-Maemo-Display-Name: MeeRevive
+XB-Maemo-Icon-26:
+@ICON@

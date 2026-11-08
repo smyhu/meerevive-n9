@@ -1,0 +1,34 @@
+MeeRevive for Nokia N9 - licences of the included components
+=============================================================
+MeeRevive engine (engine.sh, lib/, tools/): MIT.
+Designed and written by Claude (Anthropic) together with smyhu for Nokia N9.
+
+Component            Licence                      Source code
+-------------------  ---------------------------  ------------------------------------------------
+tls (n9-tls)         MIT; OpenSSL licence;        https://github.com/smyhu/n9-tls
+                     LGPL-2.1 (Qt), curl licence
+tls/original         Nokia PR1.3 open-source pkgs  /sources/ in the PR1.3 SDK image
+  (rollback only)    LGPL-2.1 (Qt, aegis, accounts,  http://maemo.cloud-7.de/HARM/N9/1.3/cdrom.iso
+                     signoncrypto), GPL-2 (cryptsetup),
+                     curl licence, CMU/BSD (sasl)
+emoji-font           Symbola, Douros free licence  https://dn-works.com/ufas/ (see payload/fonts)
+webp                 BSD (libwebp) + MIT           https://chromium.googlesource.com/webm/libwebp
+waluty               MIT                           https://github.com/smyhu/waluty-n9
+lyrion-n9            MIT (squeezelite GPL-3)       https://github.com/smyhu/lyrion-n9
+meetranslate         MIT                           https://github.com/smyhu/meetranslate-n9
+hal2027              MIT                           https://github.com/smyhu/hal2027-n9
+gpsinfo-n9           MIT                           https://github.com/smyhu/gpsinfo-n9
+ttrss                GPL-2+                        https://github.com/smyhu/ttrss-n9
+netmee-n9            MIT                           https://github.com/smyhu/netmee-n9
+authmee-n9           MIT                           https://github.com/smyhu/authmee-n9
+modrana (n9.4)       GPL-3                         https://github.com/smyhu/modrana-n9
+meecast 1.1.33       LGPL-2.1 (Vlad Vasiliev)      https://github.com/Meecast/meecast
+meecast-applet       LGPL-2.1, MeeCast project     https://github.com/Meecast/meecast
+                     (one .desktop file only)
+meecast-openmeteo    GPL-2+ (script), LGPL-2.1 (QML from MeeCast); weather data          payload/meecast (scripts and QML are the source)
+                     Open-Meteo.com CC BY 4.0;
+                     places GeoNames CC BY 4.0, GUS
+kanaly               MIT                           payload/tools/kanaly.sh
+
+Private build only (not in the public package):
+cloudgps-fix         GPL binary of CloudGPS 0.6.4 without published source

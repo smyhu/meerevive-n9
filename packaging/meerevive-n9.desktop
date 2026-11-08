@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=MeeRevive
+Comment=Patches and apps for the Nokia N9
+Exec=/usr/bin/python /opt/meerevive-n9/app/main.py
+Icon=/usr/share/icons/hicolor/80x80/apps/meerevive-n9.png
+Categories=System;
