@@ -26,8 +26,11 @@ meetranslate|deb|$R/tlumacz/meetranslate/meetranslate_0.1.1_armel.deb|tls|MeeTra
 hal2027|deb|$R/agent-ai/hal2027/dist/hal2027_0.1.14_armel.deb|tls|HAL 2027 - AI assistant|
 gpsinfo-n9|deb|$R/nawigacja/gpsinfo/dist/gpsinfo-n9_0.1.6_armel.deb||GPS Info - satellites and map|
 ttrss|deb|$R/ttrss/aplikacja/ttrss_0.4.9_armel.deb|tls|Tiny Tiny RSS client||replace
-netmee-n9|deb|$R/przegladarka/netmee/dist/netmee-n9_0.1.3_armel.deb|tls|NetMee - light web browser|
+netmee-n9|deb|$P/feedmee/dist/netmee-n9_0.1.5_armel.deb|tls|NetMee - light web browser|
 authmee-n9|deb|$R/authenticator/authmee/dist/authmee-n9_0.1.0_armel.deb||AuthMee - 2FA codes|
+forum-qml|deb|$P/forum-tmo/dist/forum-qml_0.2.1_armel.deb|tls|talk.maemo.org forum client (forum-qml)||replace
+feedmee|deb|$P/feedmee/dist/feedmee-n9_0.1.3-@V@_armel.deb||FeedMee - news with service icons in the Events view|
+meeconf|deb|$P/meeconf/dist/meeconf-n9_0.1.4_all.deb||MeeConf - bulk e-mail account setup (manual and CSV)|
 cloudgps-fix|deb|$R/nawigacja/cloudgps-fix/cloudgps-fix_1.1.0_armel.deb|tls|CloudGPS with search and routes (car, foot, bike)|cloudgps
 modrana|deb|$R/nawigacja/modrana/modrana_0.43.4-n9.4_armel.deb|tls|modRana - maps and search||replace
 meerun|deb|$P/meerun/dist/meerun_1.4.2-n9.3_armel.deb|tls|MeeRun - sports tracker with new maps (OSM, CyclOSM, OpenTopoMap, Esri)||replace
@@ -42,6 +45,7 @@ echo "# id|kind|package|version|file|requires|title|depends|preremove|flags"
 echo "$SPEC" | while IFS='|' read -r id kind src req title pre flags; do
   if [ "$VARIANT" = public ] && echo " $PRIVATE_ONLY " | grep -q " $id "; then continue; fi
   title=$(echo "$title" | sed 's/^ *//')
+  src=$(echo "$src" | sed "s/@V@/$VARIANT/")   # per-variant package (public/private)
   if [ "$kind" = deb ]; then
     f=$(basename "$src"); cp "$src" "$OUT/payload/debs/"
     pkg=$(dpkg-deb -f "$src" Package); ver=$(dpkg-deb -f "$src" Version)
@@ -72,6 +76,7 @@ for q in StationsPage CountryPage; do
 done
 cp $M/wyszukiwanie-online/OnlineSearchPage.qml "$OUT/payload/meecast/qml/"
 cp "$(dirname "$0")/LICENSES.txt" "$OUT/"
+mkdir -p "$OUT/sources" && cp -r "$(dirname "$0")/../third-party/." "$OUT/sources/"
 
 # list icons: an app's own icon (from its .desktop file), otherwise one of ours
 # (art/components, made by tools/component-icons.py)
@@ -81,7 +86,7 @@ mkdir -p "$OUT/icons"
 grep -v '^#' "$OUT/components.list" | while IFS='|' read -r id kind pkg ver file rest; do
   if [ "$kind" = deb ]; then
     deb="$OUT/payload/debs/$file"
-    ic=$(dpkg-deb --fsys-tarfile "$deb" | tar -xO --wildcards './usr/share/applications/*.desktop' 2>/dev/null | sed -n 's/^Icon=//p' | head -1)
+    ic=$(dpkg-deb --fsys-tarfile "$deb" | tar -xO --wildcards './usr/share/applications/*.desktop' 2>/dev/null | tr -d '\r' | sed -n 's/^Icon=//p' | head -1)
     case "$ic" in
       /*.png) dpkg-deb --fsys-tarfile "$deb" | tar -xO ".$ic" > "$OUT/icons/$id.png" 2>/dev/null || rm -f "$OUT/icons/$id.png" ;;
     esac

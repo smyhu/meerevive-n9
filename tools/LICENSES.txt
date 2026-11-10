@@ -21,6 +21,10 @@ gpsinfo-n9           MIT                           https://github.com/smyhu/gpsi
 ttrss                GPL-2+                        https://github.com/smyhu/ttrss-n9
 netmee-n9            MIT                           https://github.com/smyhu/netmee-n9
 authmee-n9           MIT                           https://github.com/smyhu/authmee-n9
+feedmee              MIT (smyhu)                   Python/QML source inside the package; public build has an empty bridge address
+meeconf              MIT                           https://github.com/smyhu/meeconf-n9
+forum-qml 0.2.1      GPL-2+ (Anand Bibek) + N9 patch  https://github.com/anandbibek/forum-qml-new
+                     patch and build script: third-party/forum-qml (payload/sources)
 modrana (n9.4)       GPL-3                         https://github.com/smyhu/modrana-n9
 meecast 1.1.33       LGPL-2.1 (Vlad Vasiliev)      https://github.com/Meecast/meecast
 meecast-applet       LGPL-2.1, MeeCast project     https://github.com/Meecast/meecast

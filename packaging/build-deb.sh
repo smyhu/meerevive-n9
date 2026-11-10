@@ -41,6 +41,9 @@ entry() { printf 'S 15 com.nokia.maemo H 40 %s R %d %s\n' "$1" "${#2}" "$2"; }
 cp "$ROOT/packaging/_aegis" "$T/_aegis"
 chmod 644 "$T/ctl/"*
 (cd "$T/ctl" && tar czf ../control.tar.gz --owner=0 --group=0 --numeric-owner --format=gnu ./control ./md5sums ./digsigsums)
+# Aegis cannot read GNU long-name tar entries: every path must stay under 100 chars
+long=$(cd "$T/data" && find . | awk 'length($0) > 95')
+[ -z "$long" ] || { echo "ERROR: path too long for Aegis: $long" >&2; exit 1; }
 (cd "$T/data" && tar czf ../data.tar.gz --owner=0 --group=0 --numeric-owner --format=gnu .)
 echo 2.0 > "$T/debian-binary"
 DEB="$OUT/meerevive-n9_${VERSION}-${VARIANT}_armel.deb"

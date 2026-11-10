@@ -1,0 +1,327 @@
+From fc98a46a3f8cdfcf8cd96ba3c82a5bf878ead187 Mon Sep 17 00:00:00 2001
+From: smyhu <smyhu@users.noreply.github.com>
+Date: Sun, 8 Nov 2026 13:07:44 +0000
+Subject: [PATCH] N9 fix 0.2.1: HTTPS talk.maemo.org, own User-Agent (Anubis),
+ TLS negotiation at login, http->https redirects
+
+---
+ forum-qml.pro                   |  1 +
+ src/forumlist.cpp               |  2 +-
+ src/forumlist.h                 |  3 ++-
+ src/forumnetworkaccessmanager.h | 33 +++++++++++++++++++++++++++++
+ src/forumsession.cpp            | 37 ++++++++++++++++++++++++---------
+ src/forumsession.h              |  3 ++-
+ src/main.cpp                    |  6 +++++-
+ src/postlist.cpp                |  6 +++---
+ src/threadlist.cpp              | 16 +++++++-------
+ tmo.provider                    |  2 +-
+ 10 files changed, 83 insertions(+), 26 deletions(-)
+ create mode 100644 src/forumnetworkaccessmanager.h
+
+diff --git a/forum-qml.pro b/forum-qml.pro
+index 9446887..443ff66 100644
+--- a/forum-qml.pro
++++ b/forum-qml.pro
+@@ -63,6 +63,7 @@ unix {
+ # C++ source code files
+ HEADERS += \
+     src/forum.h \
++    src/forumnetworkaccessmanager.h \
+     src/forumlist.h \
+     src/forumlistcache.h \
+     src/forumproviderlist.h \
+diff --git a/src/forumlist.cpp b/src/forumlist.cpp
+index e310e56..6e7d271 100644
+--- a/src/forumlist.cpp
++++ b/src/forumlist.cpp
+@@ -115,7 +115,7 @@ void ForumList::onReceived(const QWebElement& document)
+     QString skipCategory;
+     QString forumListTag;
+     QString forumTitleTags;
+-    if (m_session->url() == "http://talk.maemo.org") {
++    if (m_session->url() == "https://talk.maemo.org") {
+         categoryTags = "div.forum_category";
+         categoryTitleTag = "h1 > a";
+         skipCategory = "Old";
+diff --git a/src/forumlist.h b/src/forumlist.h
+index 328f533..69441d9 100644
+--- a/src/forumlist.h
++++ b/src/forumlist.h
+@@ -1,6 +1,7 @@
+ #ifndef FORUMLIST_H
+ #define FORUMLIST_H
+ 
++#include "forumnetworkaccessmanager.h"
+ #include <QAbstractListModel>
+ #include <QtNetwork>
+ #include <QtWebKit>
+@@ -47,7 +48,7 @@ public slots:
+ private:
+     void clear(void);
+ 
+-    QNetworkAccessManager m_networkAccess;
++    ForumNetworkAccessManager m_networkAccess;
+     ForumSession* m_session;
+ 
+     QString m_url;
+diff --git a/src/forumnetworkaccessmanager.h b/src/forumnetworkaccessmanager.h
+new file mode 100644
+index 0000000..6aaf453
+--- /dev/null
++++ b/src/forumnetworkaccessmanager.h
+@@ -0,0 +1,33 @@
++#ifndef FORUMNETWORKACCESSMANAGER_H
++#define FORUMNETWORKACCESSMANAGER_H
++
++#include <QNetworkAccessManager>
++#include <QNetworkRequest>
++#include <QDeclarativeNetworkAccessManagerFactory>
++
++// talk.maemo.org sits behind the Anubis anti-bot gate, which shows a JavaScript
++// proof-of-work page to every client whose User-Agent contains "Mozilla".
++// Qt 4 sends "Mozilla/5.0" when no User-Agent is set, so set our own on every request.
++#define FORUM_USER_AGENT "forum-qml/0.2.1 (Nokia N9; MeeGo Harmattan)"
++
++class ForumNetworkAccessManager : public QNetworkAccessManager
++{
++public:
++    explicit ForumNetworkAccessManager(QObject *parent = 0) : QNetworkAccessManager(parent) {}
++protected:
++    QNetworkReply *createRequest(Operation op, const QNetworkRequest &req, QIODevice *outgoingData = 0)
++    {
++        QNetworkRequest r(req);
++        r.setRawHeader("User-Agent", FORUM_USER_AGENT);
++        return QNetworkAccessManager::createRequest(op, r, outgoingData);
++    }
++};
++
++// Same User-Agent for images (avatars, smilies, attachments) loaded by QML
++class ForumNetworkAccessManagerFactory : public QDeclarativeNetworkAccessManagerFactory
++{
++public:
++    QNetworkAccessManager *create(QObject *parent) { return new ForumNetworkAccessManager(parent); }
++};
++
++#endif
+diff --git a/src/forumsession.cpp b/src/forumsession.cpp
+index 77db784..20a6273 100644
+--- a/src/forumsession.cpp
++++ b/src/forumsession.cpp
+@@ -80,6 +80,20 @@ void ForumSession::onAccountSetupFinished(void)
+ }
+ #endif
+ 
++
++// talk.maemo.org is HTTPS-only now, but vBulletin still writes absolute
++// http:// URLs into redirects and some links. Map them to the https base URL.
++static QUrl toBaseScheme(const QUrl& url, const QString& base)
++{
++    if (base.startsWith("https://")) {
++        const QString http = "http://" + base.mid(8);
++        const QString s = url.toString();
++        if (s.startsWith(http))
++            return QUrl(base + s.mid(http.length()));
++    }
++    return url;
++}
++
+ void ForumSession::onReceived(QNetworkReply *reply)
+ {
+     // Check if there are any HTTP errors
+@@ -95,7 +109,7 @@ void ForumSession::onReceived(QNetworkReply *reply)
+     // If this is a redirect, maybe follow it
+     QVariant redirect = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+     if (!redirect.isNull()) {
+-        QUrl url = redirect.toUrl();
++        QUrl url = toBaseScheme(reply->url().resolved(redirect.toUrl()), m_url);
+         if (url == QUrl("https://meego.com/forum")) {
+             // Hard-coded to skip one layer of indirection
+             url = QUrl("http://forum.meego.com");
+@@ -216,7 +230,7 @@ void ForumSession::webElementFunc(bool status)
+             if (refreshExpression.exactMatch(meta.attribute("content"))
+                     //&& refreshExpression.cap(1).startsWith(m_url)) {
+                     ){
+-                QUrl url(refreshExpression.cap(1));
++                QUrl url = toBaseScheme(QUrl(refreshExpression.cap(1)), m_url);
+                 qDebug() << refreshExpression.cap(1);
+                 qDebug() << "Redirect - requesting " << url.toString() << "to login ...";
+                 QNetworkRequest request(url);
+@@ -643,7 +657,7 @@ void ForumSession::setProvider(const QString provider)
+         if (provider == "fmc") {
+             setUrl("http://forum.meego.com");
+         } else if (provider == "tmo") {
+-            setUrl("http://talk.maemo.org");
++            setUrl("https://talk.maemo.org");
+         } else if (provider == "nokia") {
+             setUrl("http://www.developer.nokia.com/Community/Discussion/");
+         } else if (provider == "xda") {
+@@ -707,9 +721,10 @@ QString ForumSession::forumUrl(int forumId) const
+     return QString(m_url + "/forumdisplay.php?f=%1").arg(forumId);
+ }
+ 
+-void ForumSession::get(const QUrl& url)
++void ForumSession::get(const QUrl& origUrl)
+ {
+     QUrl u;
++    const QUrl url = toBaseScheme(origUrl, m_url);
+     if (url.toString().startsWith("http")) {
+         if (!url.toString().startsWith(m_url))
+             return;
+@@ -742,15 +757,16 @@ void ForumSession::login(void)
+     QUrl url = m_loginUrl.startsWith("http") ? QUrl(m_loginUrl)
+                                              : QUrl(m_url + "/" + m_loginUrl);
+     QNetworkRequest request(url);
+-    // Workaround for http://www.qtcentre.org/threads/21470-SSL-Problem
+-    QSslConfiguration config;
+-    config.setPeerVerifyMode(QSslSocket::VerifyNone);
+-    config.setProtocol(QSsl::TlsV1);
++    // talk.maemo.org (2026) accepts TLS 1.2+ only: let OpenSSL negotiate the
++    // best protocol (needs a TLS 1.2 capable QtNetwork, e.g. the n9-tls patch)
++    // and keep normal certificate verification.
++    QSslConfiguration config = request.sslConfiguration();
++    config.setProtocol(QSsl::AnyProtocol);
+     request.setSslConfiguration(config);
+ 
+     // Prepare login POSTDATA
+     QUrl data;
+-    if (m_url == "http://talk.maemo.org" || m_url == "http://forum.xda-developers.com") {
++    if (m_url == "https://talk.maemo.org" || m_url == "http://forum.xda-developers.com") {
+         QString passwordMd5 = QString(QCryptographicHash::hash(m_password.toUtf8(), QCryptographicHash::Md5).toHex());
+ 
+         //TODO: Verify space in username bug fix
+@@ -781,9 +797,10 @@ void ForumSession::login(void)
+     m_networkAccess.post(request, data.encodedQuery());
+ }
+ 
+-void ForumSession::post(const QUrl& url, const QByteArray& data)
++void ForumSession::post(const QUrl& origUrl, const QByteArray& data)
+ {
+     QUrl u;
++    const QUrl url = toBaseScheme(origUrl, m_url);
+     if (url.toString().startsWith("http")) {
+         if (!url.toString().startsWith(m_url))
+             return;
+diff --git a/src/forumsession.h b/src/forumsession.h
+index deffee9..2afe41d 100644
+--- a/src/forumsession.h
++++ b/src/forumsession.h
+@@ -1,6 +1,7 @@
+ #ifndef FORUMSESSION_H
+ #define FORUMSESSION_H
+ 
++#include "forumnetworkaccessmanager.h"
+ #include <QObject>
+ #include <QtNetwork>
+ #include <QtWebKit>
+@@ -121,7 +122,7 @@ private:
+     SignOn::AuthService m_authService;
+     SignOn::Identity* m_identity;
+ #endif
+-    QNetworkAccessManager m_networkAccess;
++    ForumNetworkAccessManager m_networkAccess;
+     QString m_securityToken;
+     QWebPage m_webPage;
+ 
+diff --git a/src/main.cpp b/src/main.cpp
+index c15e90a..41ef080 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -6,6 +6,7 @@
+ #include "forumsession.h"
+ #include "gconfitemqmlproxy.h"
+ #include "thread.h"
++#include "forumnetworkaccessmanager.h"
+ 
+ Q_DECL_EXPORT int main(int argc, char *argv[])
+ {
+@@ -23,9 +24,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
+         forumSession.setUrl("http://forum.meego.com");
+     } else if (QCoreApplication::arguments().contains("--tmo")) {
+         forumSession.setProvider("tmo");
+-        forumSession.setUrl("http://talk.maemo.org");
++        forumSession.setUrl("https://talk.maemo.org");
+     }
+ 
++    // Own User-Agent also for QML image loading (Anubis gate on talk.maemo.org)
++    viewer->engine()->setNetworkAccessManagerFactory(new ForumNetworkAccessManagerFactory);
++
+     // Export the forum session
+     viewer->rootContext()->setContextProperty("forumSession", &forumSession);
+ 
+diff --git a/src/postlist.cpp b/src/postlist.cpp
+index b83f769..98c6790 100644
+--- a/src/postlist.cpp
++++ b/src/postlist.cpp
+@@ -371,7 +371,7 @@ void PostList::onReceived(QWebElement document, int postId)
+         if(avatar.isNull())
+             avatar = "";
+         else
+-            avatar = "http://talk.maemo.org/" + avatar;
++            avatar = "https://talk.maemo.org/" + avatar;
+ 
+         //Online-offline
+         int status = (comment.findFirst("div.username > img.inlineimg").attribute("alt")).indexOf("online")==-1 ? 0 : 1;
+@@ -396,7 +396,7 @@ void PostList::onReceived(QWebElement document, int postId)
+                     QString href = a.attribute("href");
+                     if (href.startsWith("attachment.php?")) {
+                         if (m_session->provider() == "tmo")
+-                            href = "http://talk.maemo.org/" + href;
++                            href = "https://talk.maemo.org/" + href;
+                         a.setAttribute("href",href);
+                     }
+                 }
+@@ -409,7 +409,7 @@ void PostList::onReceived(QWebElement document, int postId)
+                 QString href = a.attribute("src");
+                 if (href.startsWith("attachment.php?")) {
+                     if (m_session->provider() == "tmo")
+-                        href = "http://talk.maemo.org/" + href;
++                        href = "https://talk.maemo.org/" + href;
+                     a.setAttribute("src",href);
+                 }
+             }
+diff --git a/src/threadlist.cpp b/src/threadlist.cpp
+index 6addbf2..fdc139a 100644
+--- a/src/threadlist.cpp
++++ b/src/threadlist.cpp
+@@ -474,17 +474,17 @@ void ThreadList::onReceived(QWebElement document)
+             dateTime = date;
+ 
+         beginInsertRows(QModelIndex(), children().count(), children().count());
+-        Thread* thread = new Thread(url, title, replies, threadStarter, section, dateTime);
+-        thread->setForum(forum);
+-        thread->setLastPostUrl(lastPostUrl);
+-        thread->setUnread(unread);
++        Thread* newThread = new Thread(url, title, replies, threadStarter, section, dateTime);
++        newThread->setForum(forum);
++        newThread->setLastPostUrl(lastPostUrl);
++        newThread->setUnread(unread);
+         if (votes > 0) {
+-            thread->setVotes(votes);
+-            thread->setRatingValue(ratingValue);
++            newThread->setVotes(votes);
++            newThread->setRatingValue(ratingValue);
+         }
+-        connect(thread, SIGNAL(unreadChanged()),
++        connect(newThread, SIGNAL(unreadChanged()),
+                 this, SLOT(onThreadChanged()));
+-        thread->setParent(this);
++        newThread->setParent(this);
+         endInsertRows();
+     }
+     emit countChanged();
+diff --git a/tmo.provider b/tmo.provider
+index 47425ec..b6d31b3 100644
+--- a/tmo.provider
++++ b/tmo.provider
+@@ -5,7 +5,7 @@
+     <description>Post to the talk.maemo.org community forum and follow subscribed threads</description>
+     <short-description>Community forum</short-description>
+     <icon>icon-m-service-maemo</icon>
+-    <sign-up-link>http://talk.maemo.org/register.php</sign-up-link>
++    <sign-up-link>https://talk.maemo.org/register.php</sign-up-link>
+     <account-setup>
+         <authsession>
+           <validate method="password" mechanism="password"/>
+-- 
+2.43.0
+

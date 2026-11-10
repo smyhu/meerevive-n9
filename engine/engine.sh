@@ -221,7 +221,10 @@ install_deb() {
     deps=$(field "$line" 8); preremove=$(field "$line" 9); flags=$(field "$line" 10)
     cur=$(pkgver "$pkg")
     st=$(status_of $1)
-    [ "$cur" = "$ver" ] && { say "$1: already installed ($ver)"; return 0; }
+    if [ "$cur" = "$ver" ]; then
+        [ "$flags" = replace ] && clean_store_icons $1 $pkg
+        say "$1: already installed ($ver)"; return 0
+    fi
     if [ "$st" = installed ]; then say "$1: newer version installed ($cur), skipped"; return 0; fi
     deps_ok "$deps" || return 1
     say "$1: installing $pkg $ver (was: ${cur:-none})"
@@ -251,7 +254,20 @@ install_deb() {
         fi
     fi
     [ "$(pkgver $pkg)" = "$ver" ] || { fail "$1: package state wrong after install"; return 1; }
+    [ "$flags" = replace ] && clean_store_icons $1 $pkg
     say "$1: OK"
+}
+
+# The store installer leaves its own launcher entry in installer-extra/; after the
+# store version is replaced it shows a second icon. Move away entries for this
+# package that no installed package owns (kept in $STATE/backup/installer-extra).
+clean_store_icons() {   # $1 = id, $2 = package
+    for f in /usr/share/applications/installer-extra/$2.desktop /usr/share/applications/installer-extra/$2_*.desktop; do
+        [ -f "$f" ] || continue
+        dpkg -S "$f" >/dev/null 2>&1 && continue
+        mkdir -p $STATE/backup/installer-extra
+        mv "$f" $STATE/backup/installer-extra/ && say "$1: removed leftover store icon $(basename $f)"
+    done
 }
 
 remove_deb() {
