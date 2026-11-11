@@ -23,6 +23,8 @@ netmee-n9            MIT                           https://github.com/smyhu/netm
 authmee-n9           MIT                           https://github.com/smyhu/authmee-n9
 feedmee              MIT (smyhu)                   Python/QML source inside the package; public build has an empty bridge address
 meeconf              MIT                           https://github.com/smyhu/meeconf-n9
+openvpn-n9           GPL-2 (OpenVPN, OpenSSL exception); scripts MIT   https://github.com/smyhu/openvpn-n9 (upstream https://openvpn.net, 2.5.11)
+meevpn               MIT                           https://github.com/smyhu/meevpn-n9
 forum-qml 0.2.1      GPL-2+ (Anand Bibek) + N9 patch  https://github.com/anandbibek/forum-qml-new
                      patch and build script: third-party/forum-qml (payload/sources)
 modrana (n9.4)       GPL-3                         https://github.com/smyhu/modrana-n9
