@@ -67,6 +67,7 @@ var texts = {
     "c_meeconf":           { "pl": "MeeConf - hurtowe zakładanie kont pocztowych (ręcznie i z CSV)" },
     "c_openvpn-n9":        { "pl": "OpenVPN 2.5.11 (wiersz poleceń, TLS 1.2)" },
     "c_meevpn":            { "pl": "MeeVPN - połączenia OpenVPN" },
+    "c_pathmee":           { "pl": "PathMee - rejestrator tras" },
     "c_gpsinfo-n9":        { "pl": "GPS Info - satelity i mapa" },
     "c_ttrss":             { "pl": "Klient Tiny Tiny RSS" },
     "c_netmee-n9":         { "pl": "NetMee - lekka przeglądarka" },

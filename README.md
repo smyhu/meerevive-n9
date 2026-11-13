@@ -28,7 +28,7 @@ Designed and written by Claude (Anthropic) together with smyhu.
 | WebP images | Qt image plugin + `webp2jpg` |
 | System browser opens links | links from other apps open in the built-in browser instead of the discontinued Opera Mobile |
 | Apps | [Waluty](https://github.com/smyhu/waluty-n9), [Lyrion](https://github.com/smyhu/lyrion-n9), [MeeTranslate](https://github.com/smyhu/meetranslate-n9), [HAL 2027](https://github.com/smyhu/hal2027-n9), [GPS Info](https://github.com/smyhu/gpsinfo-n9), [Tiny Tiny RSS](https://github.com/smyhu/ttrss-n9), [NetMee](https://github.com/smyhu/netmee-n9), [AuthMee](https://github.com/smyhu/authmee-n9), [modRana](https://github.com/smyhu/modrana-n9) |
-| More apps | [FeedMee](https://github.com/smyhu/feedmee-n9) (news with service icons in the Events view; set your own bridge address), [MeeConf](https://github.com/smyhu/meeconf-n9) (bulk e-mail account setup, manual or from CSV), [MeeVPN](https://github.com/smyhu/meevpn-n9) with [openvpn-n9](https://github.com/smyhu/openvpn-n9) (OpenVPN 2.5.11 client), talk.maemo.org forum client (forum-qml 0.2.1 by Anand Bibek, fixed for HTTPS; patch in [third-party/forum-qml](third-party/forum-qml)) |
+| More apps | [FeedMee](https://github.com/smyhu/feedmee-n9) (news with service icons in the Events view; set your own bridge address), [MeeConf](https://github.com/smyhu/meeconf-n9) (bulk e-mail account setup, manual or from CSV), [MeeVPN](https://github.com/smyhu/meevpn-n9) with [openvpn-n9](https://github.com/smyhu/openvpn-n9) (OpenVPN 2.5.11 client), PathMee (route recorder), talk.maemo.org forum client (forum-qml 0.2.1 by Anand Bibek, fixed for HTTPS; patch in [third-party/forum-qml](third-party/forum-qml)) |
 | MeeCast | weather app 1.1.33, its Events view applet, and an Open-Meteo weather source (the original providers are gone) |
 | Feeds app manager | `kanaly.sh`: list, add, remove, back up and restore subscriptions of the built-in Feeds app |
 
@@ -37,11 +37,11 @@ Licences of every component are in [tools/LICENSES.txt](tools/LICENSES.txt).
 ## Install
 
 You need a phone with developer mode and `aegis-dpkg` (from QTweak / hack-installer).
-Copy `dist/meerevive-n9_0.3.13-public_armel.deb` to the phone (for example to
+Copy `dist/meerevive-n9_0.3.14-public_armel.deb` to the phone (for example to
 `/home/developer`, because `/tmp` is only 4 MB) and install it as root:
 
 ```
-aegis-dpkg -i /home/developer/meerevive-n9_0.3.13-public_armel.deb
+aegis-dpkg -i /home/developer/meerevive-n9_0.3.14-public_armel.deb
 ```
 
 Then start **MeeRevive** from its icon. The package is about 37 MB because it carries every
