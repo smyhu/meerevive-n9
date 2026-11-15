@@ -33,7 +33,8 @@ feedmee|deb|$P/feedmee/dist/feedmee-n9_0.1.3-@V@_armel.deb||FeedMee - news with 
 meeconf|deb|$P/meeconf/dist/meeconf-n9_0.1.4_all.deb||MeeConf - bulk e-mail account setup (manual and CSV)|
 openvpn-n9|deb|$P/openvpn-n9/dist/openvpn-n9_2.5.11-4_armel.deb|tls|OpenVPN 2.5.11 client (command line, TLS 1.2)|
 meevpn|deb|$P/meevpn/dist/meevpn-n9_0.1.4_armel.deb|openvpn-n9|MeeVPN - OpenVPN connections|
-pathmee|deb|$P/pathmee/dist/pathmee-n9_0.3.1_armel.deb|tls|PathMee - route recorder|
+pathmee|deb|$P/pathmee/dist/pathmee-n9_0.4.1_armel.deb|tls|PathMee - route recorder|
+meegrid|deb|$P/meegrid/dist/meegrid-n9_0.1.2_all.deb||MeeGrid - back up and restore the home screen icon layout|
 cloudgps-fix|deb|$R/nawigacja/cloudgps-fix/cloudgps-fix_1.1.0_armel.deb|tls|CloudGPS with search and routes (car, foot, bike)|cloudgps
 modrana|deb|$R/nawigacja/modrana/modrana_0.43.4-n9.4_armel.deb|tls|modRana - maps and search||replace
 meerun|deb|$P/meerun/dist/meerun_1.4.2-n9.3_armel.deb|tls|MeeRun - sports tracker with new maps (OSM, CyclOSM, OpenTopoMap, Esri)||replace
