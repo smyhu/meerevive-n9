@@ -9,6 +9,8 @@ SSH or a terminal.
 - One list of components with their state: installed, not installed, update available,
   store version (replaced by our fork), incomplete. Tick what you want and tap **Install**.
   Hold an entry to install or remove just that one.
+- Filter the list by category (**All**, **System**, **Tools**, **Apps**) or show only what still needs
+  installing or updating (menu).
 - The installation log is shown live. **Full log** adds the complete output of `aegis-dpkg`,
   as you would see it over SSH.
 - After the TLS patch the app asks whether to restart the phone.
@@ -37,11 +39,11 @@ Licences of every component are in [tools/LICENSES.txt](tools/LICENSES.txt).
 ## Install
 
 You need a phone with developer mode and `aegis-dpkg` (from QTweak / hack-installer).
-Copy `dist/meerevive-n9_0.3.15-public_armel.deb` to the phone (for example to
+Copy `dist/meerevive-n9_0.3.16-public_armel.deb` to the phone (for example to
 `/home/developer`, because `/tmp` is only 4 MB) and install it as root:
 
 ```
-aegis-dpkg -i /home/developer/meerevive-n9_0.3.15-public_armel.deb
+aegis-dpkg -i /home/developer/meerevive-n9_0.3.16-public_armel.deb
 ```
 
 Then start **MeeRevive** from its icon. The package is about 37 MB because it carries every

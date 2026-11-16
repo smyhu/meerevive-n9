@@ -12,6 +12,21 @@ Page {
     property int menuIndex: -1
     property bool needRefresh: true
     property bool leftovers: false
+    property string filter: "all"      // all | system | tools | apps
+    property bool todoOnly: false
+    property int shownCount: 0
+
+    function needsWork(s) { return s == "missing" || s == "outdated" || s == "store" || s == "partial"; }
+    function shown(c, s) {
+        return (filter == "all" || filter == c) && (!todoOnly || needsWork(s));
+    }
+    function countShown() {
+        var n = 0;
+        for (var i = 0; i < comps.count; i++) if (shown(comps.get(i).cat, comps.get(i).st)) n++;
+        shownCount = n;
+    }
+    onFilterChanged: { engine.setFilter(filter); countShown(); }
+    onTodoOnlyChanged: { engine.setTodoOnly(todoOnly); countShown(); }
 
     function tr(k) { return S.t(uiLang, k) }
 
@@ -27,8 +42,8 @@ Page {
 
     function selectNeeded() {
         for (var i = 0; i < comps.count; i++) {
-            var s = comps.get(i).st;
-            comps.setProperty(i, "sel", s == "missing" || s == "outdated" || s == "store" || s == "partial");
+            var c = comps.get(i);
+            comps.setProperty(i, "sel", needsWork(c.st) && shown(c.cat, c.st));
         }
         countSel();
     }
@@ -69,13 +84,19 @@ Page {
                 if (comps.count == 0) { page.failed = true; page.failText = r.error; page.selCount = 0; }
                 return;
             }
+            // group by category (stable: keeps the engine order inside a group)
+            for (var q = 0; q < r.items.length; q++) r.items[q].pos = q;
+            r.items.sort(function (x, y) {
+                var d = S.catOrder[S.cat(x.id)] - S.catOrder[S.cat(y.id)];
+                return d != 0 ? d : x.pos - y.pos;
+            });
             // same components as before: update rows in place (keeps the scroll position)
             var same = comps.count == r.items.length;
             for (var k = 0; same && k < r.items.length; k++) same = comps.get(k).cid == r.items[k].id;
             for (var j = 0; j < r.items.length; j++) {
                 var it = r.items[j];
                 var row = { cid: it.id, st: it.state, cur: it.current, ver: it.version,
-                            req: it.requires, label: S.title(uiLang, it.id, it.title) };
+                            req: it.requires, label: S.title(uiLang, it.id, it.title), cat: S.cat(it.id) };
                 if (same) {
                     var wasSel = comps.get(j).sel;
                     for (var key in row) comps.setProperty(j, key, row[key]);
@@ -88,8 +109,11 @@ Page {
             }
             page.leftovers = engine.tlsLeftovers();
             page.countSel();
+            page.countShown();
         }
     }
+
+    Component.onCompleted: { filter = engine.filter(); todoOnly = engine.todoOnly(); }
 
     onStatusChanged: {
         if (status == PageStatus.Active && needRefresh) { needRefresh = false; refresh(); }
@@ -112,16 +136,45 @@ Page {
         platformStyle: BusyIndicatorStyle { size: "small" }
     }
 
+    ButtonRow {
+        id: filterRow
+        anchors { top: header.bottom; topMargin: 12; left: parent.left; right: parent.right; leftMargin: 8; rightMargin: 8 }
+        platformStyle: Component { ButtonStyle { fontPixelSize: 20 } }
+        checkedButton: page.filter == "system" ? bSystem : page.filter == "tools" ? bTools : page.filter == "apps" ? bApps : bAll
+        Button { id: bAll; text: tr("catAll"); onClicked: page.filter = "all" }
+        Button { id: bSystem; text: tr("cat_system"); onClicked: page.filter = "system" }
+        Button { id: bTools; text: tr("cat_tools"); onClicked: page.filter = "tools" }
+        Button { id: bApps; text: tr("cat_apps"); onClicked: page.filter = "apps" }
+    }
+
     ListView {
         id: list
-        anchors { top: header.bottom; left: parent.left; right: parent.right; bottom: parent.bottom }
+        anchors { top: filterRow.bottom; topMargin: 8; left: parent.left; right: parent.right; bottom: parent.bottom }
         clip: true
         model: comps
         visible: comps.count > 0
+        section.property: page.filter == "all" && !page.todoOnly ? "cat" : ""
+        section.delegate: Item {
+            width: list.width
+            height: 44
+            Text {
+                anchors { right: line.left; rightMargin: 12; verticalCenter: parent.verticalCenter }
+                text: S.t(uiLang, "cat_" + section)
+                color: "#8C8C8C"
+                font.family: "Nokia Pure Text"
+                font.pixelSize: 18
+            }
+            Rectangle {
+                id: line
+                anchors { right: parent.right; rightMargin: 16; verticalCenter: parent.verticalCenter }
+                width: parent.width * 0.62; height: 1; color: "#333333"
+            }
+        }
         delegate: Item {
             id: row
             width: list.width
-            height: Math.max(96, texts.height + 28)
+            visible: page.shown(model.cat, model.st)
+            height: visible ? Math.max(96, texts.height + 28) : 0
             property bool usable: model.st != "n/a"
 
             Rectangle {
@@ -189,6 +242,13 @@ Page {
         }
     }
     ScrollDecorator { flickableItem: list }
+
+    Label {
+        anchors { centerIn: list; }
+        visible: comps.count > 0 && page.shownCount == 0
+        text: tr("nothingTodo")
+        color: "#8C8C8C"
+    }
 
     Column {
         anchors.centerIn: parent
@@ -276,6 +336,10 @@ Page {
             MenuItem {
                 text: page.selCount > 0 ? tr("selectNone") : tr("selectNeeded")
                 onClicked: page.selCount > 0 ? page.selectNone() : page.selectNeeded()
+            }
+            MenuItem {
+                text: page.todoOnly ? tr("showAll") : tr("todoOnly")
+                onClicked: page.todoOnly = !page.todoOnly
             }
             MenuItem { text: tr("tlsFinish"); visible: page.leftovers; onClicked: page.runCommand("tls-finish", tr("tlsFinish")) }
             MenuItem { text: tr("backup"); onClicked: backupDialog.open() }

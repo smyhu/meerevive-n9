@@ -1,1 +1,1 @@
-3bd55ea468cc187c8346c0fb25375fd8  meerevive-n9_0.3.15-public_armel.deb
+cfc2aa686e43a4c177ba857f59a4051c  meerevive-n9_0.3.16-public_armel.deb

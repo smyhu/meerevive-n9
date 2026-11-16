@@ -30,6 +30,13 @@ var texts = {
     "rebootNeeded":  { "pl": "Potrzebne ponowne uruchomienie telefonu. Uruchomić teraz?", "en": "The phone needs a restart. Restart now?" },
     "yes":           { "pl": "Tak", "en": "Yes" },
     "no":            { "pl": "Nie", "en": "No" },
+    "catAll":        { "pl": "Wszystko", "en": "All" },
+    "cat_system":    { "pl": "System", "en": "System" },
+    "cat_tools":     { "pl": "Narzędzia", "en": "Tools" },
+    "cat_apps":      { "pl": "Aplikacje", "en": "Apps" },
+    "todoOnly":      { "pl": "Pokaż tylko do zrobienia", "en": "Show only what needs doing" },
+    "showAll":       { "pl": "Pokaż wszystkie pozycje", "en": "Show all entries" },
+    "nothingTodo":   { "pl": "Wszystko zainstalowane i aktualne", "en": "Everything is installed and up to date" },
     "about":         { "pl": "O programie", "en": "About" },
     "aboutText":     { "pl": "Instaluje łatki i aplikacje, które przywracają Nokię N9 do życia: TLS 1.2, czcionkę emoji, przeglądarkę, pogodę i aplikacje.",
                        "en": "Installs the patches and apps that bring the Nokia N9 back to life: TLS 1.2, emoji font, browser, weather and apps." },
@@ -94,3 +101,13 @@ function title(lang, id, fallback) {
     var e = texts["c_" + id];
     return (e && e[lang] !== undefined) ? e[lang] : fallback;
 }
+
+// list categories: system (patches, fixes, libraries), tools, apps (default)
+var cats = {
+    "apt-sources": "system", "tls": "system", "emoji-font": "system", "webp": "system",
+    "default-browser": "system", "openvpn-n9": "system",
+    "kanaly": "tools", "meegrid": "tools", "meeconf": "tools",
+    "meecast-applet": "tools", "meecast-openmeteo": "tools"
+};
+var catOrder = { "system": 0, "tools": 1, "apps": 2 };
+function cat(id) { return cats[id] ? cats[id] : "apps"; }

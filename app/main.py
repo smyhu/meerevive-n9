@@ -15,7 +15,7 @@ from PySide.QtCore import QObject, QUrl, QProcess, QSettings, Signal, Slot
 from PySide.QtGui import QApplication
 from PySide.QtDeclarative import QDeclarativeView
 
-APP_VERSION = '0.3.15'
+APP_VERSION = '0.3.16'
 BASE = '/opt/meerevive-n9'
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 HELPER = os.path.join(BASE, 'bin', 'meerevive-root')
@@ -187,6 +187,23 @@ class Engine(QObject):
     @Slot(bool)
     def setFullLog(self, on):
         QSettings('meerevive', 'meerevive').setValue('fullLog', 'true' if on else 'false')
+
+    @Slot(result=unicode)
+    def filter(self):
+        v = QSettings('meerevive', 'meerevive').value('filter', 'all')
+        return unicode(v) if v in ('all', 'system', 'tools', 'apps') else u'all'
+
+    @Slot(unicode)
+    def setFilter(self, f):
+        QSettings('meerevive', 'meerevive').setValue('filter', f)
+
+    @Slot(result=bool)
+    def todoOnly(self):
+        return QSettings('meerevive', 'meerevive').value('todoOnly', 'false') in ('true', True)
+
+    @Slot(bool)
+    def setTodoOnly(self, on):
+        QSettings('meerevive', 'meerevive').setValue('todoOnly', 'true' if on else 'false')
 
     @Slot(result=bool)
     def tlsLeftovers(self):

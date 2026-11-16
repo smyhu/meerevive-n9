@@ -26,7 +26,7 @@ meetranslate|deb|$R/tlumacz/meetranslate/meetranslate_0.1.1_armel.deb|tls|MeeTra
 hal2027|deb|$R/agent-ai/hal2027/dist/hal2027_0.1.14_armel.deb|tls|HAL 2027 - AI assistant|
 gpsinfo-n9|deb|$R/nawigacja/gpsinfo/dist/gpsinfo-n9_0.1.6_armel.deb||GPS Info - satellites and map|
 ttrss|deb|$R/ttrss/aplikacja/ttrss_0.4.9_armel.deb|tls|Tiny Tiny RSS client||replace
-netmee-n9|deb|$R/przegladarka/netmee/dist/netmee-n9_0.1.6_armel.deb|tls|NetMee - light web browser|
+netmee-n9|deb|$R/przegladarka/netmee/dist/netmee-n9_0.1.7_armel.deb|tls|NetMee - light web browser|
 authmee-n9|deb|$R/authenticator/authmee/dist/authmee-n9_0.1.0_armel.deb||AuthMee - 2FA codes|
 forum-qml|deb|$P/forum-tmo/dist/forum-qml_0.2.1_armel.deb|tls|talk.maemo.org forum client (forum-qml)||replace
 feedmee|deb|$P/feedmee/dist/feedmee-n9_0.1.3-@V@_armel.deb||FeedMee - news with service icons in the Events view|
