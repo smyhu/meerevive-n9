@@ -21,9 +21,9 @@ emoji-font|font|||Emoji font (Symbola)|
 webp|deb|$R/webp/qt4-imageformat-webp_1.4.0-3_armel.deb||WebP images (Qt plugin + webp2jpg)|
 default-browser|browser|||System browser opens links (not Opera)|
 waluty|deb|$P/waluty/waluty_1.1.8_armel.deb|tls|Waluty - currency rates|
-lyrion-n9|deb|$R/muzyka/aplikacja/lyrion-n9_0.6.2_armel.deb||Lyrion - music player and remote|
-meetranslate|deb|$R/tlumacz/meetranslate/meetranslate_0.1.1_armel.deb|tls|MeeTranslate - translator|
-hal2027|deb|$R/agent-ai/hal2027/dist/hal2027_0.1.14_armel.deb|tls|HAL 2027 - AI assistant|
+lyrion-n9|deb|$P/fokus-invoker/lyrion-n9_0.6.4_armel.deb||Lyrion - music player and remote|
+meetranslate|deb|$P/fokus-invoker/meetranslate_0.1.2_armel.deb|tls|MeeTranslate - translator|
+hal2027|deb|$P/fokus-invoker/hal2027_0.1.15_armel.deb|tls|HAL 2027 - AI assistant|
 gpsinfo-n9|deb|$R/nawigacja/gpsinfo/dist/gpsinfo-n9_0.1.6_armel.deb||GPS Info - satellites and map|
 ttrss|deb|$R/ttrss/aplikacja/ttrss_0.4.9_armel.deb|tls|Tiny Tiny RSS client||replace
 netmee-n9|deb|$R/przegladarka/netmee/dist/netmee-n9_0.1.7_armel.deb|tls|NetMee - light web browser|
