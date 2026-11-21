@@ -79,6 +79,8 @@ var texts = {
     "c_pwrmee":            { "pl": "PwrMee - wiarygodny poziom baterii" },
     "c_meeblocks":         { "pl": "MeeBlocks - gra w spadające klocki" },
     "c_meesnake":          { "pl": "MeeSnake - klasyczna gra w węża" },
+    "c_meemaze":           { "pl": "MeeMaze - gra w labirynt" },
+    "c_meeships":          { "pl": "MeeShips - gra w statki" },
     "c_gpsinfo-n9":        { "pl": "GPS Info - satelity i mapa" },
     "c_ttrss":             { "pl": "Klient Tiny Tiny RSS" },
     "c_netmee-n9":         { "pl": "NetMee - lekka przeglądarka" },
