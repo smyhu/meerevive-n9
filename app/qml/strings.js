@@ -76,6 +76,7 @@ var texts = {
     "c_meevpn":            { "pl": "MeeVPN - połączenia OpenVPN" },
     "c_pathmee":           { "pl": "PathMee - rejestrator tras" },
     "c_meegrid":           { "pl": "MeeGrid - kopia i przywracanie układu ikon ekranu głównego" },
+    "c_pwrmee":            { "pl": "PwrMee - wiarygodny poziom baterii" },
     "c_gpsinfo-n9":        { "pl": "GPS Info - satelity i mapa" },
     "c_ttrss":             { "pl": "Klient Tiny Tiny RSS" },
     "c_netmee-n9":         { "pl": "NetMee - lekka przeglądarka" },

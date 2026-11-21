@@ -27,6 +27,7 @@ openvpn-n9           GPL-2 (OpenVPN, OpenSSL exception); scripts MIT   https://g
 meevpn               MIT                           https://github.com/smyhu/meevpn-n9
 pathmee              MIT (smyhu)                   own code; source repository to be published
 meegrid              MIT                           https://github.com/smyhu/meegrid-n9
+pwrmee               MIT                           https://github.com/smyhu/pwrmee-n9
 forum-qml 0.2.1      GPL-2+ (Anand Bibek) + N9 patch  https://github.com/anandbibek/forum-qml-new
                      patch and build script: third-party/forum-qml (payload/sources)
 modrana (n9.4)       GPL-3                         https://github.com/smyhu/modrana-n9
