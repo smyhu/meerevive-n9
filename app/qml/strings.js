@@ -77,6 +77,8 @@ var texts = {
     "c_pathmee":           { "pl": "PathMee - rejestrator tras" },
     "c_meegrid":           { "pl": "MeeGrid - kopia i przywracanie układu ikon ekranu głównego" },
     "c_pwrmee":            { "pl": "PwrMee - wiarygodny poziom baterii" },
+    "c_meeblocks":         { "pl": "MeeBlocks - gra w spadające klocki" },
+    "c_meesnake":          { "pl": "MeeSnake - klasyczna gra w węża" },
     "c_gpsinfo-n9":        { "pl": "GPS Info - satelity i mapa" },
     "c_ttrss":             { "pl": "Klient Tiny Tiny RSS" },
     "c_netmee-n9":         { "pl": "NetMee - lekka przeglądarka" },

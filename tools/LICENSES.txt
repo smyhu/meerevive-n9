@@ -28,6 +28,8 @@ meevpn               MIT                           https://github.com/smyhu/meev
 pathmee              MIT (smyhu)                   own code; source repository to be published
 meegrid              MIT                           https://github.com/smyhu/meegrid-n9
 pwrmee               MIT                           https://github.com/smyhu/pwrmee-n9
+meeblocks            MIT                           https://github.com/smyhu/meeblocks-n9
+meesnake             MIT                           https://github.com/smyhu/meesnake-n9
 forum-qml 0.2.1      GPL-2+ (Anand Bibek) + N9 patch  https://github.com/anandbibek/forum-qml-new
                      patch and build script: third-party/forum-qml (payload/sources)
 modrana (n9.4)       GPL-3                         https://github.com/smyhu/modrana-n9

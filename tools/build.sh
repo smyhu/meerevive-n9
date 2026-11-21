@@ -21,7 +21,7 @@ emoji-font|font|||Emoji font (Symbola)|
 webp|deb|$R/webp/qt4-imageformat-webp_1.4.0-3_armel.deb||WebP images (Qt plugin + webp2jpg)|
 default-browser|browser|||System browser opens links (not Opera)|
 waluty|deb|$P/waluty/waluty_1.1.8_armel.deb|tls|Waluty - currency rates|
-lyrion-n9|deb|$P/fokus-invoker/lyrion-n9_0.6.4_armel.deb||Lyrion - music player and remote|
+lyrion-n9|deb|$P/lyrion/lyrion-n9_0.6.5_armel.deb||Lyrion - music player and remote|
 meetranslate|deb|$P/fokus-invoker/meetranslate_0.1.2_armel.deb|tls|MeeTranslate - translator|
 hal2027|deb|$P/fokus-invoker/hal2027_0.1.15_armel.deb|tls|HAL 2027 - AI assistant|
 gpsinfo-n9|deb|$R/nawigacja/gpsinfo/dist/gpsinfo-n9_0.1.6_armel.deb||GPS Info - satellites and map|
@@ -36,6 +36,8 @@ meevpn|deb|$P/meevpn/dist/meevpn-n9_0.1.4_armel.deb|openvpn-n9|MeeVPN - OpenVPN 
 pathmee|deb|$P/pathmee/dist/pathmee-n9_0.4.1_armel.deb|tls|PathMee - route recorder|
 meegrid|deb|$P/meegrid/dist/meegrid-n9_0.1.2_all.deb||MeeGrid - back up and restore the home screen icon layout|
 pwrmee|deb|$P/pwrmee/dist/pwrmee-n9_0.2.0_armel.deb||PwrMee - trustworthy battery level|
+meeblocks|deb|$P/meeblocks/dist/meeblocks-n9_0.2.1_armel.deb||MeeBlocks - falling blocks game|
+meesnake|deb|$P/meesnake/dist/meesnake-n9_0.2.0_all.deb||MeeSnake - classic snake game|
 cloudgps-fix|deb|$R/nawigacja/cloudgps-fix/cloudgps-fix_1.1.0_armel.deb|tls|CloudGPS with search and routes (car, foot, bike)|cloudgps
 modrana|deb|$R/nawigacja/modrana/modrana_0.43.4-n9.4_armel.deb|tls|modRana - maps and search||replace
 meerun|deb|$P/meerun/dist/meerun_1.4.2-n9.3_armel.deb|tls|MeeRun - sports tracker with new maps (OSM, CyclOSM, OpenTopoMap, Esri)||replace
